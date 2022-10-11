@@ -29,7 +29,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.engine('hbs', exphbs.engine({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
-app.use(express.)
 app.use(session({
 	secret: process.env.SESSION_SECRET,
 	resave: false,
@@ -100,14 +99,13 @@ app.post('/login', passport.authenticate('local', {
 }));
 
 app.get('/logout', function(req, res, next) {
-  req.logout(function(err) {
-    if (err) { 
-      return next(err); 
-      }
-    res.redirect('/');
+	req.logout(function(err) {
+	  if (err) { 
+		return next(err); 
+		}
+	  res.redirect('/');
+	});
   });
-});
-
 
 // Setup our admin user
 app.get('/setup', async (req, res) => {
@@ -135,6 +133,6 @@ app.get('/setup', async (req, res) => {
 	});
 });
 
-app.listen(3002, () => {
-	console.log("Listening on port 3002");
+app.listen(3000, () => {
+	console.log("Listening on port 3000");
 });
