@@ -8,6 +8,7 @@ const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const app = express();
 const db = require("./db");
+const { Server } = require("http");
 db.connect();
 require("dotenv").config();
 
@@ -26,7 +27,13 @@ const User = mongoose.model("User", UserSchema);
 
 // Middleware
 app.set("views", path.join(__dirname, "views"));
-app.engine("hbs", exphbs.engine({ extname: ".hbs" }));
+app.engine(
+  "hbs",
+  exphbs.engine({
+    extname: ".hbs",
+    partialsDir: path.join(app.get("views"), "partials"),
+  })
+);
 app.set("view engine", "hbs");
 app.use(express.static(__dirname + "/public"));
 app.use(
@@ -85,8 +92,8 @@ app.get("/", isLoggedIn, (req, res) => {
   res.render("index", { title: "Home" });
 });
 
-app.get("/about", (req, res) => {
-  res.render("index", { title: "About" });
+app.get("/homepage", isLoggedOut, (req, res) => {
+  res.render("main");
 });
 
 app.get("/login", isLoggedOut, (req, res) => {
