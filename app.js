@@ -1,3 +1,4 @@
+const request = require("request");
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
@@ -9,6 +10,8 @@ const bcrypt = require("bcrypt");
 const app = express();
 const db = require("./db");
 const { Server } = require("http");
+const { time } = require("console");
+const { json } = require("express");
 db.connect();
 require("dotenv").config();
 
@@ -32,6 +35,11 @@ app.engine(
   exphbs.engine({
     extname: ".hbs",
     partialsDir: path.join(app.get("views"), "partials"),
+    helpers: {
+      toJSON: function (object) {
+        return JSON.stringify(object);
+      },
+    },
   })
 );
 app.set("view engine", "hbs");
@@ -89,7 +97,36 @@ function isLoggedOut(req, res, next) {
 
 // ROUTES
 app.get("/", isLoggedIn, (req, res) => {
-  res.render("index", { title: "Home" });
+  // Choose random author
+  const request = require("request");
+  const result = request(
+    "https://poetrydb.org/author,linecount/Shakespeare;14",
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var min = Math.ceil(1);
+        var max = Math.floor(30);
+        var ranNum = Math.floor(Math.random() * (max - min) + min);
+
+        const poem = JSON.parse(body);
+
+        // Using an array to store individual poem lines.
+        let lines = [];
+        for (let i = 0; i < poem[ranNum].lines.length; i++) {
+          if (poem[ranNum].lines[i + 1] != ",") {
+            // Found a comma, push string
+            lines.push(poem[ranNum].lines[i]);
+          }
+        }
+        console.log(lines);
+
+        res.render("index", {
+          title: "Your Profile",
+          poemTitle: poem[ranNum].title,
+          lines: lines,
+        });
+      }
+    }
+  );
 });
 
 app.get("/homepage", isLoggedOut, (req, res) => {
@@ -103,6 +140,37 @@ app.get("/login", isLoggedOut, (req, res) => {
   };
 
   res.render("login", response);
+});
+
+app.get("/register", isLoggedOut, (req, res) => {
+  // const response = {
+  //   title: "Login",
+  //   error: req.query.error,
+  // };
+
+  res.render("register"); //, response);
+});
+
+app.post("/subject", isLoggedIn, function (req, res) {
+  const subject = req.body.subject;
+  console.log(subject);
+
+  const url = "http://openlibrary.org/subjects/" + subject + ".json?limit=20";
+  const request = require("request");
+  const result = request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      const json = JSON.parse(body);
+
+      var titles = [];
+      for (let i = 0; i < 20; i++) {
+        titles.push(json.works[i].title);
+      }
+
+      console.log(titles);
+
+      res.render("subjectList", { titles: titles });
+    }
+  });
 });
 
 app.post(

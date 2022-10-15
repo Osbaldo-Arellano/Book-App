@@ -1,5 +1,73 @@
 {{> loggedInNav}}
-<div class="home">
-  <h1>{{title}}</h1>
-  <a href="/logout">Logout</a>
+<div class="container" style="margin-top: 0; background-color: rgb(53, 53, 53); border-radius: 10px">
+  <div class="row">
+
+    <div class"col-sm">
+      <div class="card" style="width: 18rem; margin: 10px; background-color: #292b2c">
+        <img class="card-img-top" src="https://i.pinimg.com/736x/ab/c4/8b/abc48b4afe75a9c72f5cc162e6bf2be9.jpg" alt="Card image cap">
+        <ul class="list-group list-group-flush;">            
+          <li class="list-group-item list-group-item-dark">
+            <a href="/" role="button" style="text-align: center ;"> Change Profile Picture</a>
+          </li>
+          <li class="list-group-item list-group-item-dark">Username: Mr. Frog</li>
+          <li class="list-group-item list-group-item-dark">Books read: 
+            <ul>
+              <li>Three Body Problem 1</li>
+              <li>Three Body Problem 2</li>
+              <li>Three Body Problem 3</li>
+            </ul> 
+          </li>
+          <li class="list-group-item list-group-item-dark">Books currently reading: 
+            <ul>
+              <li>I, Robot</li>
+              <li>Foundation</li>
+            </ul> 
+          </li>
+          <li class="list-group-item list-group-item-dark">
+            <form action="/subject" method="post" style="margin-top: 10px;">
+              <div class="form-group">
+                <label style="color: black">Looking for something new to read? Search books by your fav subject! </label>
+                <input
+                class="form-control"
+                  type="text"
+                  name="subject"
+                  id="subject"
+                  placeholder="subject"
+                  required
+                />
+                <input class="form-control bg-dark" type="submit" value="Search" style="color: white;"/>
+              </div>
+            
+          </li>
+          <li class="list-group-item list-group-item-dark">
+            <a href="/logout" class="card-link">Logout</a>
+          </li>
+        </ul>
+      </div>      
+    </div>
+
+    <div class="col-sm">
+      <div class="home">
+        <h1 style="color: rgb(255, 255, 255); text-align: center">Random Sonnet:</h1>
+        <h3 style="text-align: center; margin-top: 35px; color: white">{{poemTitle}}</h3>
+        <div class="col-sm">
+          {{#each lines}}
+            <p style="text-align: center; font-size: 15px; color: white">{{this}}</p>
+          {{/each}}
+        </div>
+        <div style="text-align: center;">
+            <a class="btn btn-primary btn-sm" href="/" role="button" style="text-align: center ;">Refresh Sonnet</a>
+        </div>
+
+      </div> 
+
+
+
+    </div>
+
+  </div>
+  
 </div>
+
+
+
