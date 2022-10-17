@@ -1,4 +1,18 @@
 {{>loggedInNav}}
+
+<form action="/subject" method="post" style="margin-top: 10px;">
+<div class="form-group" style="text-align: right;">
+    <input
+    class="form-control-sm"
+        type="text"
+        name="subject"
+        id="subject"
+        placeholder="redo search"
+        required
+    />
+    <input class="form-control-sm bg-dark" type="submit" value="Search" style="color: white;"/>
+</div>
+
 <div>
     <h1 style="text-align: center; color:white">Results for {{subject}}</h1>
     <div class="card-group">
