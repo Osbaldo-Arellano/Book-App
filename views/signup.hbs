@@ -1,14 +1,15 @@
 {{> loggedOutNav }}
-    {{#if error}}
+{{#if error}}
       <div class="alert alert-danger" role="alert" style="text-align: center;">
-        Username or password was incorrect. Try again.
+        {{error}}
       </div>
     {{/if}}
 <div class="container shadow-lg p-3 mb-5 bg-secondary rounded" style="text-align: center; background-color: #292b2c; width: 400px; height: 350px; margin-top:15px; border-radius:10px">
-<form action="/login" method="post" style="display: inline-block;">
+        
+<form action="/signup" method="post" style="display: inline-block;">
   <div>
 
-    <h1 style="color: white;">Login</h1>
+    <h1 style="color: white;">Signup</h1>
   </div>
   <div class="form-group" style="text-align: center;">
     <label style="text-align: center; color: white">Username: </label>
@@ -35,7 +36,7 @@
     />
   </div>
   <div>
-    <input class="form-control" type="submit" value="Login" />
+    <input class="form-control" type="submit" value="Create Account" />
   </div>
 </form>
 </div>

@@ -117,7 +117,6 @@ app.get("/", isLoggedIn, (req, res) => {
             lines.push(poem[ranNum].lines[i]);
           }
         }
-        console.log(lines);
 
         res.render("index", {
           title: "Your Profile",
@@ -143,17 +142,11 @@ app.get("/login", isLoggedOut, (req, res) => {
 });
 
 app.get("/register", isLoggedOut, (req, res) => {
-  // const response = {
-  //   title: "Login",
-  //   error: req.query.error,
-  // };
-
-  res.render("register"); //, response);
+  res.render("register");
 });
 
 app.post("/subject", isLoggedIn, function (req, res) {
   const subject = req.body.subject;
-  console.log(subject);
 
   const url = "http://openlibrary.org/subjects/" + subject + ".json?limit=20";
   const request = require("request");
@@ -163,12 +156,13 @@ app.post("/subject", isLoggedIn, function (req, res) {
 
       var titles = [];
       for (let i = 0; i < 20; i++) {
-        titles.push(json.works[i].title);
+        titles.push(json.works[i]);
       }
 
-      console.log(titles);
-
-      res.render("subjectList", { titles: titles });
+      res.render("subjectList", {
+        titles: titles,
+        subject: subject,
+      });
     }
   });
 });
@@ -195,7 +189,7 @@ app.get("/setup", async (req, res) => {
   const exists = await User.exists({ username: "admin" });
 
   if (exists) {
-    res.redirect("/login");
+    res.redirect("/login", { error: "Username already exists" });
     return;
   }
 
@@ -214,6 +208,42 @@ app.get("/setup", async (req, res) => {
       res.redirect("/login");
     });
   });
+});
+
+app.get("/signup", async (req, res) => {
+  res.render("signup");
+});
+
+// Setup our admin user
+app.post("/signup", async (req, res) => {
+  const exists = await User.exists({ username: req.body.username });
+
+  if (exists) {
+    console.log("Username already exsits! ");
+    res.render("signup", { error: "Username already exists. Try again." });
+
+    return;
+  }
+
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return next(err);
+    bcrypt.hash(req.body.password, salt, function (err, hash) {
+      if (err) return next(err);
+
+      const newUser = new User({
+        username: req.body.username,
+        password: hash,
+      });
+
+      newUser.save();
+
+      res.redirect("/login");
+    });
+  });
+});
+
+app.get("/about", isLoggedOut, (req, res) => {
+  res.render("about");
 });
 
 app.listen(3000, () => {

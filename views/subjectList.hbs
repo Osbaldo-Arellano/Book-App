@@ -1,1 +1,40 @@
-<h1>{{titles}}</h1>
+{{>loggedInNav}}
+<div>
+    <h1 style="text-align: center; color:white">Results for {{subject}}</h1>
+    <div class="card-group">
+{{#each titles}}
+<div class="col-sm" style="margin-top: 50px; border-radius: 20px; color: white">
+    <div class="card bg-secondary" style="width: 18rem;">
+        <img class="card-img-top" src="https://www.svgrepo.com/show/104788/book.svg" alt="Card image cap">
+        <div class="card-body bg-secondary">
+            <h5 class="card-title" style="text-align: center;">{{this.title}}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-secondary">Author(s): 
+                <ul>
+                    {{#each this.authors}}
+                    <li>{{this.name}}</li>
+                    {{/each}}
+                </ul>
+            </li>
+            <li class="list-group-item bg-secondary">Published: {{this.first_publish_year}}</li>
+            {{#if this.availability.isbn}}
+                <li class="list-group-item bg-secondary">ISBN: {{this.availability.isbn}}</li>
+            {{else}}
+                <li class="list-group-item bg-secondary">ISBN: N/A</li>
+            {{/if}}
+        </ul>
+        <div class="card-body" style="text-align: center;">
+            <a href="#" class="card-link">View Book</a>
+        </div>
+    </div>
+</div>
+
+
+{{/each}}
+</div>
+</div>
+
+
+
+
